@@ -1,0 +1,59 @@
+<div class="flex flex-col items-start">
+  <h2 class="mb-2 font-bold text-4xl">Основная Информация</h2>
+  <form [formGroup]="generalForm" class="flex flex-col w-full">
+    <mat-form-field>
+      <mat-label>Название</mat-label>
+      <input
+        matInput
+        type="text"
+        [placeholder]="'Введите наименование'"
+        [spellcheck]="false"
+        [formControlName]="'name'"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Описание</mat-label>
+      <textarea
+        matInput
+        cdkAutosizeMinRows="5"
+        cdkAutosizeMaxRows="8"
+        [formControlName]="'description'"
+        [placeholder]="'Введите текст'"
+        [spellcheck]="false"
+      ></textarea>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Выберите дату</mat-label>
+      <input matInput [matDatepicker]="picker" [formControlName]="'date'" />
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Выберите статус</mat-label>
+      <mat-select [formControlName]="'complete'">
+        <mat-option [value]="'Completed'">Выполненные</mat-option>
+        <mat-option [value]="'Incompleted'">Невыполненные</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="flex justify-end gap-4">
+      <button mat-stroked-button color="warn" (click)="cancelChanges()">
+        Отменить
+      </button>
+
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!generalForm.valid"
+        (click)="saveChanges()"
+      >
+        Сохранить
+      </button>
+    </div>
+  </form>
+</div>

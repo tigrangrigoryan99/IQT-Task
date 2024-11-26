@@ -1,0 +1,102 @@
+<main class="main">
+  <section class="flex items-start justify-between w-full mb-4">
+    <mat-form-field class="mr-6 w-full">
+      <mat-label>Выберите статус</mat-label>
+      <mat-select [formControl]="selectStatus">
+        <mat-option [value]="'All'">Все</mat-option>
+        <mat-option [value]="'Completed'">Выполненные</mat-option>
+        <mat-option [value]="'Incompleted'">Невыполненные</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button
+      mat-flat-button
+      color="primary"
+      [ngStyle]="{ height: '56px' }"
+      (click)="addTask()"
+    >
+      <mat-icon>add</mat-icon>
+      Добавить задачу
+    </button>
+  </section>
+  @if(spinnerService.isSpinning$ | async) {
+  <app-spinner></app-spinner>
+  } @else { @if(toDoList.length) {
+  <div class="overflow-x-hidden max-h-96 mat-elevation-z8">
+    <table mat-table [dataSource]="toDoList" class="main__table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Название</th>
+        <td mat-cell *matCellDef="let record">{{ record.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Описание</th>
+        <td mat-cell *matCellDef="let record">{{ record.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Дата</th>
+        <td mat-cell *matCellDef="let record">
+          {{ record.date | date : "dd.MM.yyyy" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="completed">
+        <th mat-header-cell *matHeaderCellDef>Статус задачи</th>
+        <td mat-cell *matCellDef="let record">
+          {{
+            record.complete === "Completed" ? "Выполненные" : "Невыполненные"
+          }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Действия</th>
+        <td mat-cell *matCellDef="let record">
+          <button
+            mat-button
+            color="primary"
+            [matTooltip]="'Отметить как выполненный'"
+            [matTooltipPosition]="'above'"
+            (click)="markAsCompleted(record)"
+            [disabled]="record.complete === 'Completed'"
+          >
+            <mat-icon>check_circle</mat-icon>
+          </button>
+
+          <button
+            mat-button
+            [matTooltip]="'Редактировать'"
+            [matTooltipPosition]="'above'"
+            (click)="editItem(record)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+
+          <button
+            mat-button
+            color="warn"
+            [matTooltip]="'Удалить'"
+            [matTooltipPosition]="'above'"
+            (click)="deleteItem(record.id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+  } @else {
+  <p class="text-2xl font-semibold text-center">Please create new task</p>
+  } }
+  <section class="flex items-center justify-between w-full mt-8">
+    @if(taskFormService.editOrAddTask$| async) {
+    <app-task-item [task]="editedTask" class="mr-6 w-full"></app-task-item>
+    } @if(toDoList.length) {
+    <app-task-canvas [tasks]="toDoList"></app-task-canvas>
+    }
+  </section>
+</main>

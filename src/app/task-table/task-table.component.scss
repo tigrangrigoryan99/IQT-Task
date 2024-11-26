@@ -1,0 +1,11 @@
+.main {
+  padding: 12px 24px;
+  &__table {
+    margin-bottom: 16px;
+  }
+}
+
+.mat-mdc-row:hover {
+  cursor: pointer;
+  background-color: #fafafa;
+}
